@@ -1,16 +1,12 @@
 # Docker ELK stack
 
-## Access
-
-To access Kibana:
-Login: elastic
-Password: changeme
-
 [![Join the chat at https://gitter.im/deviantony/docker-elk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deviantony/docker-elk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Elastic Stack version](https://img.shields.io/badge/ELK-6.2.3-blue.svg?style=flat)](https://github.com/deviantony/docker-elk/issues/266)
-[![Build Status](https://api.travis-ci.org/deviantony/docker-elk.svg?branch=master)](https://travis-ci.org/deviantony/docker-elk)
+[![Build Status](https://api.travis-ci.org/deviantony/docker-elk.svg?branch=x-pack)](https://travis-ci.org/deviantony/docker-elk)
 
 Run the latest version of the ELK (Elasticsearch, Logstash, Kibana) stack with Docker and Docker Compose.
+
+**Note**: This version has [X-Pack support](https://www.elastic.co/products/x-pack).
 
 It will give you the ability to analyze any data set by using the searching/aggregation capabilities of Elasticsearch
 and the visualization power of Kibana.
@@ -21,18 +17,11 @@ Based on the official Docker images:
 * [logstash](https://github.com/elastic/logstash-docker)
 * [kibana](https://github.com/elastic/kibana-docker)
 
-**Note**: Other branches in this project are available:
-
-* ELK 6 with X-Pack support: https://github.com/deviantony/docker-elk/tree/x-pack
-* ELK 6 in Vagrant: https://github.com/deviantony/docker-elk/tree/vagrant
-* ELK 6 with Search Guard: https://github.com/deviantony/docker-elk/tree/searchguard
-
 ## Contents
 
 1. [Requirements](#requirements)
    * [Host setup](#host-setup)
    * [SELinux](#selinux)
-   * [DockerForWindows](#dockerforwindows)
 2. [Getting started](#getting-started)
    * [Bringing up the stack](#bringing-up-the-stack)
    * [Initial setup](#initial-setup)
@@ -68,15 +57,9 @@ apply the proper context:
 $ chcon -R system_u:object_r:admin_home_t:s0 docker-elk/
 ```
 
-### DockerForWindows
-
-If you're using Docker for Windows, ensure the 'Shared Drives' feature is enabled for the C: drive (Docker for Windows > Settings > Shared Drives). [MSDN article detailing Shared Drives config](https://blogs.msdn.microsoft.com/stevelasker/2016/06/14/configuring-docker-for-windows-volumes/).
-
 ## Usage
 
 ### Bringing up the stack
-
-**Note**: In case you switched branch or updated a base image - you may need to run `docker-compose build` first
 
 Start the ELK stack using `docker-compose`:
 
@@ -91,7 +74,13 @@ $ docker-compose up -d
 ```
 
 Give Kibana a few seconds to initialize, then access the Kibana web UI by hitting
-[http://localhost:5601](http://localhost:5601) with a web browser.
+[http://localhost:5601](http://localhost:5601) with a web browser and use the following default credentials to login:
+
+* user: *elastic*
+* password: *changeme*
+
+Refer to the Elastic documentation for a list of built-in users: [Setting Up User
+Authentication](https://www.elastic.co/guide/en/x-pack/current/setting-up-authentication.html#built-in-users)
 
 By default, the stack exposes the following ports:
 * 5000: Logstash TCP input.
@@ -134,6 +123,7 @@ Create an index pattern via the Kibana API:
 $ curl -XPOST -D- 'http://localhost:5601/api/saved_objects/index-pattern' \
     -H 'Content-Type: application/json' \
     -H 'kbn-version: 6.2.3' \
+    -u kibana:changeme \
     -d '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}'
 ```
 
