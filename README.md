@@ -61,6 +61,12 @@ $ chcon -R system_u:object_r:admin_home_t:s0 docker-elk/
 
 ### Bringing up the stack
 
+Create an external docker volume for Elasticsearch persistence:
+
+```console
+$ docker volume create elastic-search
+```
+
 Start the ELK stack using `docker-compose`:
 
 ```console
@@ -72,6 +78,10 @@ You can also choose to run it in background (detached mode):
 ```console
 $ docker-compose up -d
 ```
+
+### Filebeat
+
+An example Filebeat set up can be found in the `filebeat` directory.
 
 Give Kibana a few seconds to initialize, then access the Kibana web UI by hitting
 [http://localhost:5601](http://localhost:5601) with a web browser and use the following default credentials to login:

@@ -1,0 +1,19 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /mnt/log/*.log
+
+processors:
+- add_cloud_metadata:
+
+# output.logstash:
+#   hosts: ['logstash:5044']
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"
+setup.kibana:
+  host: "kibana:5601"
+  username: "elastic"
+  password: "changeme"
